@@ -1,0 +1,12 @@
+id: VSM-000
+title: <short deviation>
+status: open
+source_system: S1 | S2 | S3 | S3* | S4 | S5
+signal_type: routine | audit | intelligence | algedonic
+severity: S0 | S1 | S2 | S3
+claim: <what is wrong or changing>
+evidence: []
+impact: <why it matters>
+owner: <role or human>
+needs_human_decision: false
+next_check: <ISO date or event>

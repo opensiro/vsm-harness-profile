@@ -1,0 +1,42 @@
+# Local configuration example for the MAX profile.
+# This is not a VSM manifest or ecosystem interchange format.
+
+meta:
+  name: <project-vsm>
+  version: 0.1.0
+  snapshot: <ISO timestamp>
+
+identity:
+  mission: <mission>
+  boundary:
+    inside: []
+    outside: []
+  human_only_decisions: []
+  invariants: []
+
+system_1:
+  units: []
+system_2:
+  conflicts: []
+  handoff_example: prompts/shared.md
+system_3:
+  kpis: []
+  budgets: {}
+system_3_star:
+  read_only: true
+  independence_rule: <evidence path sufficiently independent for the claim being challenged>
+system_4:
+  premises: []
+  environment_sources: []
+system_5:
+  prompt: prompts/s5-policy.md
+  prepares_human_decisions: true
+
+channels:
+  ordinary: <implementation-specific operational, coordination, control, intelligence, and policy conversations>
+  audit: S3* -> raw S1 evidence -> orchestrator
+  algedonic: any critical unit -> S5/human
+
+state:
+  status_path: state/status.json
+  issue_path: issues/

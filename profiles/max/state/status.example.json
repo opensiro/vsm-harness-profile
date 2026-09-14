@@ -1,0 +1,19 @@
+{
+  "generated": "<ISO timestamp>",
+  "project": "<project-vsm>",
+  "commit": "<git ref>",
+  "overall": "unknown",
+  "systems": {
+    "S1": {"status": "unknown", "evidence": []},
+    "S2": {"status": "unknown", "evidence": []},
+    "S3": {"status": "unknown", "evidence": []},
+    "S3*": {"status": "unknown", "evidence": []},
+    "S4": {"status": "unknown", "evidence": []},
+    "S5": {"status": "unknown", "evidence": []}
+  },
+  "metrics": {},
+  "open_deviations": [],
+  "external_signals": [],
+  "human_decisions": [],
+  "next": []
+}
