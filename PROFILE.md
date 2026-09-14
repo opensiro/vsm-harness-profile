@@ -18,12 +18,9 @@ It does not define a model provider, agent protocol, RPC, transport, message for
 
 An agent, service, human, policy, evaluator, or distributed combination may perform a VSM function. Component names are never sufficient evidence.
 
-For the harness interpretation, assessment is centered on **agent autonomy**: which
-AI agent absorbs variety, exercises discretion, and holds bounded decision rights.
-Deterministic routing, storage, logging, interrupts, and human control may support or
-constrain that autonomy, but do not by themselves establish agentic enactment of a
-VSM function. Record the responsible agent and its authority separately from the
-supporting mechanism.
+For the harness interpretation, assessment is centered on **agent autonomy**: which AI agent absorbs variety, exercises discretion, and holds bounded decision rights. Deterministic routing, storage, logging, interrupts, and human control may support or constrain that autonomy, but do not by themselves establish agentic enactment of a VSM function.
+
+**Map the organizational function before classifying autonomy.** First establish what VSM function, if any, the observed behavior realizes at the declared system boundary. Only then identify the responsible actor, its decision rights, and how much of that function is agent-owned. A mechanism can support a VSM function without an autonomous agent owning it; conversely, agent autonomy does not make an arbitrary mechanism a VSM function.
 
 Normative words such as `MUST` and `SHOULD` apply only to organizational invariants claimed by this profile, not to implementation mechanisms or certification.
 
@@ -57,9 +54,9 @@ VSM distinguishes **operations**, which enact the system's primary transformatio
 
 **Harness interpretation.** S2 may use shared work state, reservations, scheduling, negotiated plans, collision detection, or human coordination practices.
 
-**Invariants.** Where several S1 units coexist, enough coordination MUST exist to prevent destructive interference without centralizing decisions the units can absorb locally.
+**Invariants.** Where several S1 units coexist, enough coordination MUST exist to prevent destructive interference without centralizing decisions the units can absorb locally. A positive S2 mapping therefore needs evidence of a coordination problem among operational units and a mechanism or actor that regulates that interference.
 
-**Not equivalent to.** A message bus, queue, or router merely because it moves messages.
+**Not equivalent to.** A message bus, queue, router, workflow edge, task sequence, speaker selector, or parent-to-child delegation merely because it moves or assigns work. Delegation and task decomposition alone do not establish S2.
 
 ## 6. System 3 — inside-and-now control
 
@@ -67,9 +64,9 @@ VSM distinguishes **operations**, which enact the system's primary transformatio
 
 **Harness interpretation.** S3 may allocate budgets and tools, negotiate priorities, regulate current commitments, and intervene when local optimization threatens the larger system.
 
-**Invariants.** S3 needs a whole-system view of current operations and actual authority over relevant resources or constraints. It SHOULD govern by exception rather than reproduce every local decision.
+**Invariants.** S3 needs a whole-system view of current operations and actual authority over relevant resources or constraints. It SHOULD govern by exception rather than reproduce every local decision. Task allocation counts only when it is part of such whole-system regulation, not merely decomposition of a parent task.
 
-**Not equivalent to.** Anything named manager, orchestrator, controller, or supervisor.
+**Not equivalent to.** Anything named manager, orchestrator, controller, supervisor, or lead agent. Selecting a worker, delegating a subtask, merging returned results, or enforcing a static workflow does not by itself establish S3.
 
 ## 7. System 3* — complementary audit
 
@@ -77,9 +74,9 @@ VSM distinguishes **operations**, which enact the system's primary transformatio
 
 **Harness interpretation.** Raw-artifact inspection, sampled replay, reconciliation, adversarial probes, external ground truth, or an independent evaluator may contribute when they can challenge ordinary operational claims.
 
-**Invariants.** When routine reporting cannot provide enough confidence, the audit path MUST be sufficiently independent for the claim and risk it addresses. Its findings inform control, but S3* is not a duplicate S3.
+**Invariants.** When routine reporting cannot provide enough confidence, the audit path MUST be sufficiently independent for the claim and risk it addresses. Its findings inform control, but S3* is not a duplicate S3. The audit path must add materially different access to operational reality rather than merely repeat the normal production check.
 
-**Not equivalent to.** Generic logs, tracing, ordinary tests, or evaluation controlled entirely by the unit whose claims are being checked.
+**Not equivalent to.** Generic logs, tracing, ordinary tests, or evaluation controlled entirely by the unit whose claims are being checked. A routine checker, critic, verifier, or mandatory QA stage in the same operational path is not automatically S3*.
 
 ## 8. System 4 — outside-and-then intelligence
 
@@ -87,9 +84,9 @@ VSM distinguishes **operations**, which enact the system's primary transformatio
 
 **Harness interpretation.** S4 may investigate changing users, regulation, adversarial behaviour, model or tool capabilities, dependencies, threats, and opportunities, then test future-oriented options.
 
-**Invariants.** S4 MUST be externally and prospectively oriented. Its model must enter a two-way conversation with current operational capability in S3.
+**Invariants.** S4 MUST be externally and prospectively oriented. Its model must enter a two-way conversation with current operational capability in S3. A positive S4 mapping therefore needs evidence of external or future-relevant distinctions, development of adaptation options, and a path by which those options can affect present capability.
 
-**Not equivalent to.** Internal task planning, backlog ordering, chain-of-thought, or a component called planner.
+**Not equivalent to.** Internal task planning, backlog ordering, chain-of-thought, a component called planner, generic learning, self-improvement, training, memory consolidation, or reaction to an external event by itself. These become relevant to S4 only when they participate in an external-and-prospective adaptation loop.
 
 ## 9. System 5 — policy and identity
 
@@ -99,7 +96,7 @@ VSM distinguishes **operations**, which enact the system's primary transformatio
 
 **Invariants.** S5 needs legitimate ultimate authority at the chosen recursion level. It SHOULD preserve coherence and balance S3 and S4 without absorbing routine operational control.
 
-**Not equivalent to.** A system prompt, policy file, safety filter, or executive agent by name alone.
+**Not equivalent to.** A system prompt, policy file, safety filter, approval gate, static constitution, or executive agent by name alone. Constraints and policy text may bound autonomy without themselves providing runtime identity or ultimate-policy closure.
 
 ## 10. Recursion and autonomy
 
@@ -157,17 +154,28 @@ Use these evidence bases:
 | `inferred` | The mapping depends on stated assumptions. |
 | `unknown` | Evidence is insufficient to establish presence or absence. |
 
-For each material mapping record function, responsible actors or mechanisms, evidence, basis, confidence, boundary, and caveat.
+For each material mapping record function, responsible actors or mechanisms, decision rights, evidence, basis, confidence, boundary, and caveat.
+
+Apply the evidence in this order:
+
+1. establish the organizational function from behavior and relationships at the declared system boundary;
+2. identify the actor or mechanism that carries it;
+3. determine whether an autonomous agent owns the relevant decision right or whether the function remains runtime-, developer-, human-, or parent-owned;
+4. only then apply any local autonomy notation defined outside this profile.
 
 Absence of documentation is not proof of absence. Conversely, labels such as “manager”, “planner”, “auditor”, and “policy agent” are not proof of function.
 
 ## 14. Frequent category errors
 
 - **Component-name mapping:** equating labels with S-functions.
+- **Delegation as coordination:** task decomposition or parent-child delegation is counted as S2 without evidence of interference regulation among operations.
+- **Manager as control:** task assignment or result aggregation is counted as S3 without a whole-system current view and authority over shared constraints or resources.
 - **Centralized pseudo-viability:** a supervisor absorbs variety that belongs in autonomous S1 units.
 - **Coordination as command:** S2 becomes another top-down controller.
 - **Audit as observability:** the same path produces the action, success claim, metric, and evaluation.
+- **Verifier as audit:** routine checking is counted as S3* without complementary and sufficiently independent access to operational reality.
 - **Planning as intelligence:** internal task planning is counted as S4 without external/future coupling.
+- **Learning as intelligence:** training, self-improvement, memory, or event reaction is counted as S4 without an external-and-prospective adaptation loop.
 - **Prompt as policy:** policy text exists without legitimate authority or S3–S4 closure.
 - **Nesting as recursion:** a technical child lacks its own environment, autonomy, and metasystem.
 - **Cargo-cult completeness:** six named actors are created solely to mirror VSM labels.
