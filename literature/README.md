@@ -26,7 +26,9 @@ Secondary sources explain VSM but do not override Beer or the explicit boundary 
 
 ## 3. Adaptations and modifications
 
-- [Organizational Synthesis Model](adaptations/organizational-synthesis-model.md) is a local working extension. Its phases, transformations, and assisted-viability measures are not Beer concepts.
+- [Agent VSM Extension](adaptations/agent-vsm-extension.md) is a local descriptive extension for agent harnesses. It studies conditional regulatory load, redundancy, collapse, parent-supplied functions, and limiting cases such as `Environment ⇄ S1`. These claims are not Beer concepts and do not redefine the canonical S1–S5 meanings in `PROFILE.md`.
+- [Organizational Synthesis Model](adaptations/organizational-synthesis-model.md) is a local prescriptive development methodology. It describes progressive organizational development and transformation, including a practical `S1 → S2 → S3 → S3* → S4 → S5` construction path with conditional gates. Its phases, transformations, and assisted-viability measures are not Beer concepts.
+- [`opensiro/terminal-bench-vsm`](https://github.com/opensiro/terminal-bench-vsm) is a worked historical example of evolutionary VSM development. In particular, [`vsmlite-tb/osm.md`](https://github.com/opensiro/terminal-bench-vsm/blob/main/vsmlite-tb/osm.md) records an earlier progressive-acquisition approach. It is implementation evidence, not theoretical authority.
 - [`../profiles/`](../profiles/) contains MIN/MAX agent-harness implementation profiles. They are examples, not literature and not conformance levels.
 - [`vsm-skills`](https://github.com/opensiro/vsm-skills) owns evidence collection, token-cost methods, and categorical TL;DR rules. Those are operationalizations of the profile.
 
