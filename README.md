@@ -1,6 +1,6 @@
 # VSM Harness Profile
 
-**Current Profile version: `0.2.0`**
+**Current Profile version: `0.2.1`**
 
 VSM Harness Profile is the implementation-agnostic organizational reference for autonomous AI agent harnesses.
 
@@ -42,6 +42,7 @@ downstream autonomy classification
 | [VERSION](VERSION) | Canonical Profile version. |
 | [VERSIONING.md](VERSIONING.md) | Versioning, release, and downstream provenance contract. |
 | [CHANGELOG.md](CHANGELOG.md) | Material normative changes and assessment impact. |
+| [VALIDATION.md](VALIDATION.md) | Deterministic completion-oracle checks and the boundary with semantic review. |
 | [literature/](literature/README.md) | Provenance separated into primary sources, secondary sources, and explicit adaptations. |
 | [profiles/](profiles/README.md) | Non-normative MIN/MAX implementation examples derived from the profile. |
 | [examples/](examples/) | Short conceptual examples at different boundaries and recursion levels. |
@@ -53,6 +54,17 @@ Evidence collection and standalone repository assessments belong to [`assess-vsm
 The Profile follows the policy in [VERSIONING.md](VERSIONING.md). `v0.2.0` is the first explicitly versioned repository revision. The immediately preceding pre-versioned line can be referred to as the `v0.1.0` baseline for migration discussion, but no historical `v0.1.0` tag/release was published.
 
 Downstream assessments should preserve which Profile and assessment-procedure versions they used so semantic revisions can trigger targeted, traceable reassessment rather than silent reinterpretation.
+
+## Validation
+
+Ordinary repository-maintenance invariants can be checked locally with:
+
+```bash
+python scripts/validate_repository.py
+python -m unittest discover -s tests -v
+```
+
+See [VALIDATION.md](VALIDATION.md) for the machine-checkable boundary. These checks intentionally do not judge whether VSM semantics are conceptually correct.
 
 ## Boundary
 
