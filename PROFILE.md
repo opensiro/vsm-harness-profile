@@ -1,6 +1,6 @@
 # VSM Harness Profile
 
-**Version:** 0.2.0
+**Version:** 0.2.1
 
 ## 1. Status and source boundary
 
@@ -102,9 +102,18 @@ VSM distinguishes **operations**, which enact the system's primary transformatio
 
 **Harness interpretation.** S2 may use shared work state, reservations, scheduling, negotiated plans, collision detection, or human coordination practices.
 
-**Invariants.** Where several S1 units coexist, enough coordination MUST exist to prevent destructive interference without centralizing decisions the units can absorb locally. A positive S2 mapping therefore needs evidence of a coordination problem among operational units and a mechanism or actor that regulates that interference.
+**Invariants.** Where several S1 units coexist, enough coordination MUST exist to prevent destructive interference without centralizing decisions the units can absorb locally. A positive S2 mapping therefore needs evidence, at the declared recursion level, of all of the following:
 
-**Not equivalent to.** A message bus, queue, router, workflow edge, task sequence, speaker selector, or parent-to-child delegation merely because it moves or assigns work. Delegation and task decomposition alone do not establish S2.
+1. at least two distinct S1 operational units;
+2. a **specific actual or structurally evidenced interference, conflict, or oscillation** arising from their interaction;
+3. a coordination relation specifically capable of attenuating that disturbance;
+4. a feedback or closure path by which the coordination result changes subsequent S1 behaviour.
+
+The disturbance need not already have caused a failure. Structural evidence is sufficient when the implementation exposes a concrete collision or instability mode together with the mechanism intended to regulate it. Merely observing that two agents could hypothetically disagree is not sufficient.
+
+For ownership analysis, identify separately who chooses or revises the coordination response and what merely transports or enforces it. Deterministic locks, reservations, queues, turn-taking rules, schedulers, or similar mechanisms may provide strong structural evidence for the S2 path, but they do not by themselves establish agent ownership of the decisive coordination discretion.
+
+**Not equivalent to.** A message bus, mailbox, queue, router, workflow edge, task sequence, speaker selector, shared state, or parent-to-child delegation merely because it moves, records, orders, or assigns work. These mechanisms count only when evidence ties them to regulation of a specific inter-S1 disturbance. Delegation and task decomposition alone do not establish S2.
 
 ## 7. System 3 — inside-and-now control
 
@@ -239,7 +248,7 @@ Absence of documentation is not proof of absence. Conversely, labels such as “
 
 - **Component-name mapping:** equating labels with S-functions.
 - **Enforcement as ownership:** a scheduler, policy engine, budget monitor, kill switch, or deterministic controller is treated as the owner of the organizational decision merely because it enforces the result.
-- **Delegation as coordination:** task decomposition or parent-child delegation is counted as S2 without evidence of interference regulation among operations.
+- **Delegation as coordination:** task decomposition, mediation, routing, or parent-child delegation is counted as S2 without evidence tying it to regulation of a specific inter-S1 interference, conflict, or oscillation.
 - **Manager as control:** task assignment or result aggregation is counted as S3 without a whole-system current view and authority over shared constraints or resources.
 - **Centralized pseudo-viability:** a supervisor absorbs variety that belongs in autonomous S1 units.
 - **Coordination as command:** S2 becomes another top-down controller.
