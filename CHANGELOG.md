@@ -2,6 +2,20 @@
 
 All material changes to the normative VSM Harness Profile are recorded here.
 
+## 0.2.2 — 2026-09-17
+
+### Changed
+
+- clarify the terminology boundary between an **agent actor** and an **agent harness**;
+- define an agent actor as an autonomous or semi-autonomous decision-making participant that performs work within an agentic process;
+- define an agent harness as the system that structures, enables, and governs an agentic work process for one or more agent actors;
+- make explicit that harness control may be deterministic, agentic, or hybrid, so an agent actor may also participate in the harness control structure;
+- clarify that a wider assembled product may colloquially be called an “agent”, while Profile analysis distinguishes actor and organizing system through the declared system-in-focus.
+
+### Compatibility
+
+This is a PATCH terminology clarification. It does not change any S1–S5 function, ownership rule, autonomy state, evidence threshold, or existing conforming mapping. It makes the harness interpretation explicit for supervisor/subagent and other agentic-control architectures without prescribing a required topology.
+
 ## 0.2.1 — 2026-09-16
 
 ### Changed

@@ -1,6 +1,6 @@
 # VSM Harness Profile
 
-**Version:** 0.2.1
+**Version:** 0.2.2
 
 ## 1. Status and source boundary
 
@@ -19,6 +19,8 @@ The canonical Profile version is declared in [`VERSION`](VERSION). Versioning an
 The profile asks whether a declared system-in-focus has the organizational functions and relationships needed to remain coherent and adapt in a changing environment.
 
 It does not define a model provider, agent protocol, RPC, transport, message format, manifest, tool protocol, identity system, telemetry standard, workflow language, runtime API, deployment model, programming language, or required number of agents.
+
+For this Profile, an **agent actor** is an autonomous or semi-autonomous decision-making participant that performs work within an agentic process. An **agent harness** is the system that structures, enables, and governs that process for one or more agent actors. Harness control may be deterministic, agentic, or hybrid; an agent actor may therefore also participate in the harness's control structure. At a wider product boundary the assembled system may colloquially be called an “agent”; this Profile uses the declared system-in-focus to distinguish the actor from the organizing system. These terms clarify the analysis boundary and do not prescribe an implementation topology.
 
 An agent, service, human, policy, evaluator, or distributed combination may perform a VSM function. Component names are never sufficient evidence.
 
