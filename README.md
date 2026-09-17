@@ -40,8 +40,10 @@ downstream autonomy classification
 | --- | --- |
 | [PROFILE.md](PROFILE.md) | Normative VSM basis, harness interpretation, invariants, ownership/evidence rules, and category errors. |
 | [VERSION](VERSION) | Canonical Profile version. |
-| [VERSIONING.md](VERSIONING.md) | Versioning, release, and downstream provenance contract. |
-| [CHANGELOG.md](CHANGELOG.md) | Material normative changes and assessment impact. |
+| [VERSIONING.md](VERSIONING.md) | SemVer, release, provenance, and reassessment-impact policy. |
+| [CONSUMER_CONTRACT.md](CONSUMER_CONTRACT.md) | Stable downstream facade: provenance vs compatibility, release-impact composition, and consumer obligations. |
+| [RELEASE_IMPACT.json](RELEASE_IMPACT.json) | Machine-readable Profile release-impact chain for deterministic downstream selection. |
+| [CHANGELOG.md](CHANGELOG.md) | Human-readable material changes, compatibility, and assessment impact. |
 | [VALIDATION.md](VALIDATION.md) | Deterministic completion-oracle checks and the boundary with semantic review. |
 | [literature/](literature/README.md) | Provenance separated into primary sources, secondary sources, and explicit adaptations. |
 | [profiles/](profiles/README.md) | Non-normative MIN/MAX implementation examples derived from the profile. |
@@ -49,11 +51,13 @@ downstream autonomy classification
 
 Evidence collection and standalone repository assessments belong to [`assess-vsm-harness`](https://github.com/opensiro/vsm-harness-skills/tree/main/skills/assess-vsm-harness). Cohort-relative synthesis belongs to `vsm-harness-skills`, while the published assessment corpus and derived tables belong to [vsm-harness-index](https://github.com/opensiro/vsm-harness-index).
 
-## Versioning
+## Versioning and downstream compatibility
 
 The Profile follows the policy in [VERSIONING.md](VERSIONING.md). `v0.2.0` is the first explicitly versioned repository revision. The immediately preceding pre-versioned line can be referred to as the `v0.1.0` baseline for migration discussion, but no historical `v0.1.0` tag/release was published.
 
-Downstream assessments should preserve which Profile and assessment-procedure versions they used so semantic revisions can trigger targeted, traceable reassessment rather than silent reinterpretation.
+Downstream artifacts preserve the exact Profile and assessment-procedure versions that produced them. A later Profile version does **not** by itself require reassessment or provenance rewrites. Consumers determine whether review is needed from the release-impact path defined by [CONSUMER_CONTRACT.md](CONSUMER_CONTRACT.md) and represented in [RELEASE_IMPACT.json](RELEASE_IMPACT.json).
+
+In particular, a compatible PATCH with `assessment_impact: none` can become the active Profile without touching every historical harness assessment. Targeted or breaking changes remain explicit and traceable.
 
 ## Validation
 
@@ -64,11 +68,13 @@ python scripts/validate_repository.py
 python -m unittest discover -s tests -v
 ```
 
-See [VALIDATION.md](VALIDATION.md) for the machine-checkable boundary. These checks intentionally do not judge whether VSM semantics are conceptually correct.
+See [VALIDATION.md](VALIDATION.md) for the machine-checkable boundary. These checks intentionally do not judge whether VSM semantics or a maintainer's impact classification are conceptually correct.
 
 ## Boundary
 
 The profile defines organizational functions and relationships. It does not define protocols, transports, manifests, runtimes, deployment models, message formats, a required agent topology, or a numerical maturity model.
+
+The downstream facade similarly does not define a second semantic model. It only tells consumers how to preserve exact Profile provenance and reason about later release compatibility without treating every version bump as a corpus migration.
 
 ## License
 

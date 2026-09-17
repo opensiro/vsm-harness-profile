@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 import subprocess
 import tempfile
 import unittest
@@ -28,12 +29,46 @@ class RepositoryValidationTests(unittest.TestCase):
             encoding="utf-8",
         )
         (root / "VERSIONING.md").write_text("# Versioning\n", encoding="utf-8")
+        (root / "CONSUMER_CONTRACT.md").write_text("# Consumer contract\n", encoding="utf-8")
         (root / "CHANGELOG.md").write_text(
-            "# Changelog\n\n## 0.2.1 — 2026-09-16\n\nCurrent release.\n",
+            "# Changelog\n\n## 0.2.1 — 2026-09-16\n\nCurrent release.\n\n"
+            "## 0.2.0 — 2026-09-16\n\nPrevious release.\n",
             encoding="utf-8",
+        )
+        self.write_impact(
+            root,
+            [
+                {
+                    "version": "0.2.0",
+                    "previous": "baseline",
+                    "compatibility": "compatible",
+                    "assessment_impact": "targeted",
+                    "selectors": ["concept:decision-ownership"],
+                },
+                {
+                    "version": "0.2.1",
+                    "previous": "0.2.0",
+                    "compatibility": "compatible",
+                    "assessment_impact": "none",
+                    "selectors": [],
+                },
+            ],
         )
         (root / "LICENSE").write_text("license\n", encoding="utf-8")
         return root
+
+    def write_impact(self, root: Path, releases: list[dict[str, object]]) -> None:
+        (root / "RELEASE_IMPACT.json").write_text(
+            json.dumps(
+                {"profile": "opensiro/vsm-harness-profile", "releases": releases},
+                indent=2,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+
+    def impact(self, root: Path) -> dict[str, object]:
+        return json.loads((root / "RELEASE_IMPACT.json").read_text(encoding="utf-8"))
 
     def assert_has_error(self, root: Path, needle: str) -> None:
         errors = VALIDATOR.validate(root)
@@ -52,8 +87,8 @@ class RepositoryValidationTests(unittest.TestCase):
 
     def test_missing_required_file_fails(self) -> None:
         root = self.make_repo()
-        (root / "VERSIONING.md").unlink()
-        self.assert_has_error(root, "missing required repository file: VERSIONING.md")
+        (root / "CONSUMER_CONTRACT.md").unlink()
+        self.assert_has_error(root, "missing required repository file: CONSUMER_CONTRACT.md")
 
     def test_broken_local_reference_fails(self) -> None:
         root = self.make_repo()
@@ -71,6 +106,37 @@ class RepositoryValidationTests(unittest.TestCase):
             "# VSM Harness Profile\n\n**Version:** 0.2.1\n", encoding="utf-8"
         )
         self.assert_has_error(root, "only independently versioned Profile source")
+
+    def test_release_impact_latest_version_drift_fails(self) -> None:
+        root = self.make_repo()
+        data = self.impact(root)
+        data["releases"] = data["releases"][:-1]
+        self.write_impact(root, data["releases"])
+        self.assert_has_error(root, "latest release-impact version is 0.2.0")
+
+    def test_patch_cannot_trigger_targeted_reassessment(self) -> None:
+        root = self.make_repo()
+        data = self.impact(root)
+        latest = data["releases"][-1]
+        latest["assessment_impact"] = "targeted"
+        latest["selectors"] = ["function:S2"]
+        self.write_impact(root, data["releases"])
+        self.assert_has_error(root, "PATCH releases must be compatible with assessment_impact='none'")
+
+    def test_targeted_impact_requires_selector(self) -> None:
+        root = self.make_repo()
+        data = self.impact(root)
+        first = data["releases"][0]
+        first["selectors"] = []
+        self.write_impact(root, data["releases"])
+        self.assert_has_error(root, "assessment_impact='targeted' requires at least one selector")
+
+    def test_release_impact_chain_must_be_contiguous(self) -> None:
+        root = self.make_repo()
+        data = self.impact(root)
+        data["releases"][-1]["previous"] = "0.1.9"
+        self.write_impact(root, data["releases"])
+        self.assert_has_error(root, "previous must reference prior release '0.2.0'")
 
     def test_release_tag_version_mismatch_fails(self) -> None:
         root = self.make_repo()

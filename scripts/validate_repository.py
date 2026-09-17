@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import re
 import subprocess
 import sys
@@ -12,12 +13,16 @@ from urllib.parse import unquote, urlsplit
 
 SEMVER_PATTERN = r"(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?"
 SEMVER_RE = re.compile(rf"^{SEMVER_PATTERN}$")
+STABLE_SEMVER_RE = re.compile(r"^(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)$")
 PROFILE_VERSION_RE = re.compile(rf"^\*\*Version:\*\*\s+({SEMVER_PATTERN})\s*$", re.MULTILINE)
 README_VERSION_RE = re.compile(
     rf"^\*\*Current Profile version:\s*`({SEMVER_PATTERN})`\*\*\s*$", re.MULTILINE
 )
 CHANGELOG_VERSION_RE = re.compile(rf"^##\s+({SEMVER_PATTERN})(?:\s+[^\n]*)?$", re.MULTILINE)
 MARKDOWN_LINK_RE = re.compile(r"!?\[[^\]]*\]\(([^)]+)\)")
+SELECTOR_RE = re.compile(
+    r"^(?:function:(?:S1|S2|S3|S3\*|S4|S5)|(?:evidence|concept):[a-z0-9]+(?:-[a-z0-9]+)*)$"
+)
 
 REQUIRED_FILES = (
     "PROFILE.md",
@@ -25,8 +30,13 @@ REQUIRED_FILES = (
     "VERSIONING.md",
     "CHANGELOG.md",
     "README.md",
+    "CONSUMER_CONTRACT.md",
+    "RELEASE_IMPACT.json",
     "LICENSE",
 )
+
+ALLOWED_COMPATIBILITY = {"compatible", "breaking"}
+ALLOWED_IMPACT = {"none", "targeted", "all"}
 
 
 def _read(path: Path) -> str:
@@ -82,13 +92,143 @@ def check_version_surfaces(root: Path, errors: list[str]) -> str | None:
     return version
 
 
+def _stable_core(version: str) -> tuple[int, int, int] | None:
+    if not STABLE_SEMVER_RE.fullmatch(version):
+        return None
+    return tuple(int(part) for part in version.split("."))  # type: ignore[return-value]
+
+
+def _change_kind(previous: str, current: str) -> str | None:
+    prev = _stable_core(previous)
+    curr = _stable_core(current)
+    if prev is None or curr is None or curr <= prev:
+        return None
+    if curr[0] != prev[0]:
+        return "major"
+    if curr[1] != prev[1]:
+        return "minor"
+    if curr[2] != prev[2]:
+        return "patch"
+    return None
+
+
+def check_release_impact(root: Path, version: str | None, errors: list[str]) -> None:
+    path = root / "RELEASE_IMPACT.json"
+    if not path.is_file():
+        return
+
+    try:
+        data = json.loads(_read(path))
+    except (json.JSONDecodeError, UnicodeDecodeError) as exc:
+        errors.append(f"RELEASE_IMPACT.json: invalid JSON: {exc}")
+        return
+
+    if not isinstance(data, dict):
+        errors.append("RELEASE_IMPACT.json: root must be an object")
+        return
+    if data.get("profile") != "opensiro/vsm-harness-profile":
+        errors.append("RELEASE_IMPACT.json: profile must be 'opensiro/vsm-harness-profile'")
+
+    releases = data.get("releases")
+    if not isinstance(releases, list) or not releases:
+        errors.append("RELEASE_IMPACT.json: releases must be a non-empty array")
+        return
+
+    seen: set[str] = set()
+    previous_row_version: str | None = None
+    impact_versions: list[str] = []
+
+    for index, row in enumerate(releases):
+        context = f"RELEASE_IMPACT.json releases[{index}]"
+        if not isinstance(row, dict):
+            errors.append(f"{context}: expected object")
+            continue
+
+        release_version = row.get("version")
+        previous = row.get("previous")
+        compatibility = row.get("compatibility")
+        impact = row.get("assessment_impact")
+        selectors = row.get("selectors")
+
+        if not isinstance(release_version, str) or not STABLE_SEMVER_RE.fullmatch(release_version):
+            errors.append(f"{context}: version must be a stable Semantic Version")
+            continue
+        impact_versions.append(release_version)
+        if release_version in seen:
+            errors.append(f"{context}: duplicate version {release_version}")
+        seen.add(release_version)
+
+        if index == 0:
+            if previous != "baseline":
+                errors.append(f"{context}: first release must use previous='baseline'")
+        elif previous != previous_row_version:
+            errors.append(
+                f"{context}: previous must reference prior release {previous_row_version!r}, found {previous!r}"
+            )
+
+        if compatibility not in ALLOWED_COMPATIBILITY:
+            errors.append(
+                f"{context}: compatibility must be one of {sorted(ALLOWED_COMPATIBILITY)}, found {compatibility!r}"
+            )
+        if impact not in ALLOWED_IMPACT:
+            errors.append(f"{context}: assessment_impact must be one of {sorted(ALLOWED_IMPACT)}, found {impact!r}")
+        if not isinstance(selectors, list) or any(not isinstance(item, str) for item in selectors):
+            errors.append(f"{context}: selectors must be an array of strings")
+            selectors = []
+        elif len(selectors) != len(set(selectors)):
+            errors.append(f"{context}: selectors must not contain duplicates")
+
+        if impact == "none" and selectors:
+            errors.append(f"{context}: assessment_impact='none' requires selectors=[]")
+        elif impact == "targeted":
+            if not selectors:
+                errors.append(f"{context}: assessment_impact='targeted' requires at least one selector")
+            for selector in selectors:
+                if not SELECTOR_RE.fullmatch(selector):
+                    errors.append(f"{context}: invalid targeted selector {selector!r}")
+        elif impact == "all" and selectors != ["*"]:
+            errors.append(f"{context}: assessment_impact='all' requires selectors=['*']")
+
+        if index > 0 and isinstance(previous, str):
+            kind = _change_kind(previous, release_version)
+            if kind is None:
+                errors.append(f"{context}: release versions must form a strictly increasing stable SemVer chain")
+            elif kind == "patch":
+                if compatibility != "compatible" or impact != "none":
+                    errors.append(f"{context}: PATCH releases must be compatible with assessment_impact='none'")
+            elif kind == "minor":
+                if compatibility != "compatible" or impact not in {"none", "targeted"}:
+                    errors.append(
+                        f"{context}: MINOR releases must be compatible and may only use assessment_impact none|targeted"
+                    )
+            elif kind == "major":
+                if compatibility != "breaking" or impact not in {"targeted", "all"}:
+                    errors.append(
+                        f"{context}: MAJOR releases must be breaking with assessment_impact targeted|all"
+                    )
+
+        previous_row_version = release_version
+
+    if version is not None and impact_versions and impact_versions[-1] != version:
+        errors.append(
+            f"RELEASE_IMPACT.json: latest release-impact version is {impact_versions[-1]}, expected {version} from VERSION"
+        )
+
+    changelog_path = root / "CHANGELOG.md"
+    if changelog_path.is_file():
+        changelog_versions = CHANGELOG_VERSION_RE.findall(_read(changelog_path))
+        if set(changelog_versions) != set(impact_versions):
+            errors.append(
+                "RELEASE_IMPACT.json: release versions must match CHANGELOG.md version headings; "
+                f"impact={impact_versions}, changelog={changelog_versions}"
+            )
+
+
 def _link_target(raw: str) -> str | None:
     target = raw.strip()
     if target.startswith("<") and ">" in target:
         target = target[1 : target.index(">")]
     elif any(char.isspace() for char in target):
-        # Optional Markdown title follows whitespace. Repository paths containing
-        # spaces should be percent-encoded, which keeps this deterministic.
         target = target.split(maxsplit=1)[0]
 
     if not target or target.startswith("#"):
@@ -202,7 +342,8 @@ def check_release_tags(root: Path, errors: list[str]) -> None:
 def validate(root: Path) -> list[str]:
     errors: list[str] = []
     check_required_files(root, errors)
-    check_version_surfaces(root, errors)
+    version = check_version_surfaces(root, errors)
+    check_release_impact(root, version, errors)
     check_local_markdown_links(root, errors)
     check_single_profile_source(root, errors)
     check_release_tags(root, errors)

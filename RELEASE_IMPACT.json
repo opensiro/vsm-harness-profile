@@ -1,0 +1,32 @@
+{
+  "profile": "opensiro/vsm-harness-profile",
+  "releases": [
+    {
+      "version": "0.2.0",
+      "previous": "baseline",
+      "compatibility": "compatible",
+      "assessment_impact": "targeted",
+      "selectors": [
+        "concept:decision-ownership",
+        "concept:closure",
+        "evidence:deterministic-enforcement",
+        "evidence:approval-gate",
+        "evidence:unspecified-owner"
+      ]
+    },
+    {
+      "version": "0.2.1",
+      "previous": "0.2.0",
+      "compatibility": "compatible",
+      "assessment_impact": "none",
+      "selectors": []
+    },
+    {
+      "version": "0.2.2",
+      "previous": "0.2.1",
+      "compatibility": "compatible",
+      "assessment_impact": "none",
+      "selectors": []
+    }
+  ]
+}
