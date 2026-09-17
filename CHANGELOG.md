@@ -1,6 +1,6 @@
 # Changelog
 
-All material changes to the normative VSM Harness Profile are recorded here.
+All material changes to the normative VSM Harness Profile are recorded here. Downstream release impact is also represented mechanically in [`RELEASE_IMPACT.json`](RELEASE_IMPACT.json).
 
 ## 0.2.2 — 2026-09-17
 
@@ -12,9 +12,18 @@ All material changes to the normative VSM Harness Profile are recorded here.
 - make explicit that harness control may be deterministic, agentic, or hybrid, so an agent actor may also participate in the harness control structure;
 - clarify that a wider assembled product may colloquially be called an “agent”, while Profile analysis distinguishes actor and organizing system through the declared system-in-focus.
 
+### Repository contract
+
+- introduce the downstream consumer contract separating exact Profile provenance from later-release compatibility;
+- add machine-readable release-impact history so compatible Profile updates do not imply automatic reassessment or provenance rewrites.
+
 ### Compatibility
 
 This is a PATCH terminology clarification. It does not change any S1–S5 function, ownership rule, autonomy state, evidence threshold, or existing conforming mapping. It makes the harness interpretation explicit for supervisor/subagent and other agentic-control architectures without prescribing a required topology.
+
+### Assessment impact
+
+`none` — existing conforming assessments do not require reassessment because of this Profile transition. Their original Profile provenance remains unchanged.
 
 ## 0.2.1 — 2026-09-16
 
@@ -31,6 +40,10 @@ This is a PATCH clarification of requirements already present in Profile 0.2.0 a
 
 A conforming 0.2.0 mapping should remain conforming under 0.2.1. Existing assessments whose positive S2 state was based only on generic coordination primitives or mediation should be treated as same-ref corrections under their frozen assessment contract rather than as semantic migrations caused by this patch.
 
+### Assessment impact
+
+`none` — the PATCH does not itself require reassessment. Weak historical S2 positives discovered while applying the already-existing frozen evidence contract are same-ref corrections, not migration work caused by Profile 0.2.1.
+
 ## 0.2.0 — 2026-09-16
 
 ### Changed
@@ -46,7 +59,7 @@ A conforming 0.2.0 mapping should remain conforming under 0.2.1. Existing assess
 
 ### Assessment impact
 
-This revision is intended to reduce false-positive autonomy classifications without redefining Stafford Beer's functions. Existing assessments whose positive state depends mainly on deterministic enforcement, approval gates, or an unspecified responsible actor should receive targeted reassessment under the Index workflow.
+`targeted` — existing assessments whose positive state depends mainly on deterministic enforcement, approval gates, or an unspecified responsible actor should receive targeted reassessment under the Index workflow. The machine-readable selectors additionally identify decision ownership and closure as affected cross-function concepts.
 
 ## Pre-versioned baseline
 
