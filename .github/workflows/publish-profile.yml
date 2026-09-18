@@ -1,0 +1,53 @@
+name: publish-profile
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - PROFILE.md
+      - VERSION
+      - CHANGELOG.md
+      - scripts/publish_profile_release.py
+      - scripts/check_release_tracking.py
+      - .github/workflows/publish-profile.yml
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Profile version to repair/backfill
+        required: false
+        type: string
+      target_sha:
+        description: Exact release target SHA; required when version is supplied
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Publish requested or current Profile release
+        env:
+          REQUESTED_VERSION: ${{ inputs.version }}
+          REQUESTED_SHA: ${{ inputs.target_sha }}
+        run: |
+          set -euo pipefail
+          if [[ -n "${REQUESTED_VERSION:-}" || -n "${REQUESTED_SHA:-}" ]]; then
+            test -n "${REQUESTED_VERSION:-}"
+            test -n "${REQUESTED_SHA:-}"
+            python scripts/publish_profile_release.py --version "$REQUESTED_VERSION" --target-sha "$REQUESTED_SHA"
+          else
+            python scripts/publish_profile_release.py
+          fi
+      - name: Verify release tracking
+        run: python scripts/check_release_tracking.py
