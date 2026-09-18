@@ -2,6 +2,25 @@
 
 All material changes to the normative VSM Harness Profile are recorded here. Downstream release impact is also represented mechanically in [`RELEASE_IMPACT.json`](RELEASE_IMPACT.json).
 
+## 0.2.3 — 2026-09-19
+
+### Changed
+
+- make boundary provenance explicit: repository co-location is not evidence that an actor or control path belongs to the declared system-in-focus;
+- require positive mappings to use decisive owners and closure paths reachable in the declared operating/deployment boundary;
+- clarify that adjacent first-party development, dogfood, CI/release, evaluation, test, governance, example, or contributor systems may corroborate a mapping or demonstrate a constructor pattern without closing the assessed function;
+- add repository co-location as a named category error.
+
+### Compatibility
+
+This is a PATCH clarification of the existing system-in-focus, evidence-boundary and closure requirements. It does not redefine S1-S5/S3*, autonomy, ownership, recursion, or any VSM function. A conforming mapping remains conforming.
+
+Weak historical mappings exposed by this clarification are same-ref corrections under their frozen assessment contract rather than reassessment impact caused by Profile 0.2.3.
+
+### Assessment impact
+
+`none` — existing conforming assessments do not require reassessment solely because of this Profile transition.
+
 ## 0.2.2 — 2026-09-17
 
 ### Changed

@@ -77,6 +77,12 @@ class RepositoryValidationTests(unittest.TestCase):
     def test_valid_fixture_passes(self) -> None:
         self.assertEqual(VALIDATOR.validate(self.make_repo()), [])
 
+    def test_profile_keeps_boundary_provenance_invariant(self) -> None:
+        profile = (SCRIPT.parents[1] / "PROFILE.md").read_text(encoding="utf-8")
+        self.assertIn("Repository co-location is not evidence of membership in the declared system-in-focus", profile)
+        self.assertIn("MUST be reachable in the declared operating or deployment boundary being assessed", profile)
+        self.assertIn("Repository co-location as system membership", profile)
+
     def test_readme_version_drift_fails(self) -> None:
         root = self.make_repo()
         (root / "README.md").write_text(

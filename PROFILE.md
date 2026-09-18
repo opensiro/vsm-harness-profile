@@ -1,6 +1,6 @@
 # VSM Harness Profile
 
-**Version:** 0.2.2
+**Version:** 0.2.3
 
 ## 1. Status and source boundary
 
@@ -85,6 +85,14 @@ Every application MUST state:
 - the evidence boundary and observation date/ref.
 
 The **environment** includes the people, systems, institutions, constraints, opportunities, and disturbances with which the system must maintain a viable relationship. Moving the boundary can change every mapping.
+
+### Boundary provenance and system membership
+
+Repository co-location is not evidence of membership in the declared system-in-focus. A first-party agent, workflow, CI/release mechanism, benchmark or evaluator, contributor tool, dogfood organization, example, or test may belong to an adjacent system, recursion, or purpose even when it lives in the same repository.
+
+For a positive mapping, the decisive decision or feedback path **MUST be reachable in the declared operating or deployment boundary being assessed**. Evidence from an adjacent first-party system MAY corroborate interpretation or demonstrate a construction pattern, but it MUST NOT close the assessed function unless the declared mode actually includes or wires that path.
+
+When one repository contains product/runtime, constructor/example, development/dogfood, and evaluation/governance surfaces, the mapping SHOULD state which surface supplies the credited owner and closure and which adjacent surfaces are excluded from ownership. A repository-development organization therefore does not become part of a distributed product harness merely because both are first-party and co-located.
 
 VSM distinguishes **operations**, which enact the system's primary transformation, from the **metasystem**, which creates cohesion and adaptation. This is a functional distinction, not necessarily a managerial hierarchy.
 
@@ -238,9 +246,10 @@ Apply the evidence in this order:
 1. establish the organizational function from behavior and relationships at the declared system boundary;
 2. identify the decisive decision or feedback right that closes the function;
 3. identify who owns that right: agent, deterministic runtime, developer/configuration, human, parent system, or a described distributed arrangement;
-4. separate supporting transport, persistence, enforcement, scheduling, or guardrail mechanisms from ownership;
-5. establish the closure path into subsequent control or operation where the function requires one;
-6. only then apply any local autonomy notation defined outside this profile.
+4. establish **boundary provenance**: show that the credited owner and closure path are reachable in the declared operating/deployment mode rather than borrowed from an adjacent first-party development, dogfood, evaluation, test, or governance system;
+5. separate supporting transport, persistence, enforcement, scheduling, or guardrail mechanisms from ownership;
+6. establish the closure path into subsequent control or operation where the function requires one;
+7. only then apply any local autonomy notation defined outside this profile.
 
 When ownership remains ambiguous, apply the counterfactual owner test from Section 3 and state the uncertainty rather than allowing a supporting mechanism to stand in for the decision owner.
 
@@ -249,6 +258,7 @@ Absence of documentation is not proof of absence. Conversely, labels such as “
 ## 15. Frequent category errors
 
 - **Component-name mapping:** equating labels with S-functions.
+- **Repository co-location as system membership:** crediting a development, dogfood, evaluation, test, or governance actor to the assessed product/runtime merely because both are first-party and live in the same repository.
 - **Enforcement as ownership:** a scheduler, policy engine, budget monitor, kill switch, or deterministic controller is treated as the owner of the organizational decision merely because it enforces the result.
 - **Delegation as coordination:** task decomposition, mediation, routing, or parent-child delegation is counted as S2 without evidence tying it to regulation of a specific inter-S1 interference, conflict, or oscillation.
 - **Manager as control:** task assignment or result aggregation is counted as S3 without a whole-system current view and authority over shared constraints or resources.
