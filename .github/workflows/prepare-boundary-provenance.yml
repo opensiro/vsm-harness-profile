@@ -1,0 +1,87 @@
+name: prepare-boundary-provenance
+
+on:
+  push:
+    branches:
+      - clarify-boundary-provenance-20
+
+permissions:
+  contents: write
+
+jobs:
+  prepare:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Apply Profile 0.2.3 clarification
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+
+          def replace_once(path, old, new):
+              p = Path(path)
+              text = p.read_text(encoding='utf-8')
+              if text.count(old) != 1:
+                  raise SystemExit(f'{path}: expected one anchor, found {text.count(old)}')
+              p.write_text(text.replace(old, new, 1), encoding='utf-8')
+
+          Path('VERSION').write_text('0.2.3\n', encoding='utf-8')
+          replace_once('README.md', '**Current Profile version: `0.2.2`**', '**Current Profile version: `0.2.3`**')
+          replace_once('PROFILE.md', '**Version:** 0.2.2', '**Version:** 0.2.3')
+
+          boundary_anchor = 'The **environment** includes the people, systems, institutions, constraints, opportunities, and disturbances with which the system must maintain a viable relationship. Moving the boundary can change every mapping.\n\n'
+          boundary_text = boundary_anchor + '''### Boundary provenance and system membership\n\nRepository co-location is not evidence of membership in the declared system-in-focus. A first-party agent, workflow, CI/release mechanism, benchmark or evaluator, contributor tool, dogfood organization, example, or test may belong to an adjacent system, recursion, or purpose even when it lives in the same repository.\n\nFor a positive mapping, the decisive decision or feedback path **MUST be reachable in the declared operating or deployment boundary being assessed**. Evidence from an adjacent first-party system MAY corroborate interpretation or demonstrate a construction pattern, but it MUST NOT close the assessed function unless the declared mode actually includes or wires that path.\n\nWhen one repository contains product/runtime, constructor/example, development/dogfood, and evaluation/governance surfaces, the mapping SHOULD state which surface supplies the credited owner and closure and which adjacent surfaces are excluded from ownership. A repository-development organization therefore does not become part of a distributed product harness merely because both are first-party and co-located.\n\n'''
+          replace_once('PROFILE.md', boundary_anchor, boundary_text)
+
+          evidence_old = '''1. establish the organizational function from behavior and relationships at the declared system boundary;\n2. identify the decisive decision or feedback right that closes the function;\n3. identify who owns that right: agent, deterministic runtime, developer/configuration, human, parent system, or a described distributed arrangement;\n4. separate supporting transport, persistence, enforcement, scheduling, or guardrail mechanisms from ownership;\n5. establish the closure path into subsequent control or operation where the function requires one;\n6. only then apply any local autonomy notation defined outside this profile.\n'''
+          evidence_new = '''1. establish the organizational function from behavior and relationships at the declared system boundary;\n2. identify the decisive decision or feedback right that closes the function;\n3. identify who owns that right: agent, deterministic runtime, developer/configuration, human, parent system, or a described distributed arrangement;\n4. establish **boundary provenance**: show that the credited owner and closure path are reachable in the declared operating/deployment mode rather than borrowed from an adjacent first-party development, dogfood, evaluation, test, or governance system;\n5. separate supporting transport, persistence, enforcement, scheduling, or guardrail mechanisms from ownership;\n6. establish the closure path into subsequent control or operation where the function requires one;\n7. only then apply any local autonomy notation defined outside this profile.\n'''
+          replace_once('PROFILE.md', evidence_old, evidence_new)
+
+          category_anchor = '- **Component-name mapping:** equating labels with S-functions.\n'
+          category_new = category_anchor + '- **Repository co-location as system membership:** crediting a development, dogfood, evaluation, test, or governance actor to the assessed product/runtime merely because both are first-party and live in the same repository.\n'
+          replace_once('PROFILE.md', category_anchor, category_new)
+
+          changelog_anchor = '# Changelog\n\nAll material changes to the normative VSM Harness Profile are recorded here. Downstream release impact is also represented mechanically in [`RELEASE_IMPACT.json`](RELEASE_IMPACT.json).\n\n'
+          changelog_entry = changelog_anchor + '''## 0.2.3 — 2026-09-19\n\n### Changed\n\n- make boundary provenance explicit: repository co-location is not evidence that an actor or control path belongs to the declared system-in-focus;\n- require positive mappings to use decisive owners and closure paths reachable in the declared operating/deployment boundary;\n- clarify that adjacent first-party development, dogfood, CI/release, evaluation, test, governance, example, or contributor systems may corroborate a mapping or demonstrate a constructor pattern without closing the assessed function;\n- add repository co-location as a named category error.\n\n### Compatibility\n\nThis is a PATCH clarification of the existing system-in-focus, evidence-boundary and closure requirements. It does not redefine S1-S5/S3*, autonomy, ownership, recursion, or any VSM function. A conforming mapping remains conforming.\n\nWeak historical mappings exposed by this clarification are same-ref corrections under their frozen assessment contract rather than reassessment impact caused by Profile 0.2.3.\n\n### Assessment impact\n\n`none` — existing conforming assessments do not require reassessment solely because of this Profile transition.\n\n'''
+          replace_once('CHANGELOG.md', changelog_anchor, changelog_entry)
+
+          impact_path = Path('RELEASE_IMPACT.json')
+          data = json.loads(impact_path.read_text(encoding='utf-8'))
+          if data['releases'][-1]['version'] != '0.2.2':
+              raise SystemExit('unexpected release-impact tail')
+          data['releases'].append({
+              'version': '0.2.3',
+              'previous': '0.2.2',
+              'compatibility': 'compatible',
+              'assessment_impact': 'none',
+              'selectors': [],
+          })
+          impact_path.write_text(json.dumps(data, indent=2) + '\n', encoding='utf-8')
+
+          test_path = Path('tests/test_validate_repository.py')
+          text = test_path.read_text(encoding='utf-8')
+          anchor = '''    def test_valid_fixture_passes(self) -> None:\n        self.assertEqual(VALIDATOR.validate(self.make_repo()), [])\n\n'''
+          test = anchor + '''    def test_profile_keeps_boundary_provenance_invariant(self) -> None:\n        profile = (SCRIPT.parents[1] / "PROFILE.md").read_text(encoding="utf-8")\n        self.assertIn("Repository co-location is not evidence of membership in the declared system-in-focus", profile)\n        self.assertIn("MUST be reachable in the declared operating or deployment boundary being assessed", profile)\n        self.assertIn("Repository co-location as system membership", profile)\n\n'''
+          if text.count(anchor) != 1:
+              raise SystemExit('test anchor mismatch')
+          test_path.write_text(text.replace(anchor, test, 1), encoding='utf-8')
+          PY
+      - name: Validate repository
+        run: |
+          python scripts/validate_repository.py
+          python -m unittest discover -s tests -v
+      - name: Remove preparation workflow and commit
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git rm .github/workflows/prepare-boundary-provenance.yml
+          git add VERSION README.md PROFILE.md CHANGELOG.md RELEASE_IMPACT.json tests/test_validate_repository.py
+          git commit -m 'Clarify system boundary provenance in Profile 0.2.3'
+          git push
