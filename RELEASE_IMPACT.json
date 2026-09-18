@@ -27,6 +27,13 @@
       "compatibility": "compatible",
       "assessment_impact": "none",
       "selectors": []
+    },
+    {
+      "version": "0.2.3",
+      "previous": "0.2.2",
+      "compatibility": "compatible",
+      "assessment_impact": "none",
+      "selectors": []
     }
   ]
 }
