@@ -84,4 +84,11 @@ For questions or proposals about **how the OpenSiro VSM Harness OSS repositories
 
 ## License
 
-Original profile documentation, examples, and implementation profiles are licensed under [CC BY 4.0](LICENSE). Third-party literature is excluded and retains its stated license or copyright status; see [literature/README.md](literature/README.md). The bundled article is separately covered by [CC BY-NC-ND 4.0](LICENSES/CC-BY-NC-ND-4.0.txt) and its companion attribution record.
+Licensing follows repository function rather than applying a software license to the normative specification:
+
+- original Profile documentation, examples, implementation profiles, and machine-readable semantic/release metadata are licensed under [CC BY 4.0](LICENSE);
+- repository-maintenance software in `scripts/` and `tests/`, plus CI workflow configuration under `.github/workflows/`, is licensed under [Apache License 2.0](LICENSES/Apache-2.0.txt);
+- third-party literature is excluded from both grants and retains its stated license or copyright status; see [literature/README.md](literature/README.md);
+- the bundled article is separately covered by [CC BY-NC-ND 4.0](LICENSES/CC-BY-NC-ND-4.0.txt) and its companion attribution record.
+
+This licensing clarification does not change the Profile version or normative semantics.
