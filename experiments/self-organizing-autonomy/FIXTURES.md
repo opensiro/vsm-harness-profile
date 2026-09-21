@@ -38,7 +38,7 @@ That makes it useful precisely because it is easy to over-classify. The experime
 
 The review question is narrower:
 
-> At a pinned Ouroboros revision and declared operating boundary, is there primary evidence that an existing organizational/regulatory repertoire became insufficient for material in-domain variety, that Ouroboros itself recognized that insufficiency, reconstructed the relevant organizational organization/repertoire without an external constructor supplying the missing logic, integrated the reconstruction under legitimate authority, and then used it to absorb the target variety?
+> At a pinned Ouroboros revision and declared operating boundary, is there primary evidence that an existing organizational/regulatory repertoire became insufficient for material in-domain variety, that Ouroboros itself recognized that insufficiency, reconstructed the relevant organizational/regulatory repertoire without an external constructor supplying the missing logic, integrated the reconstruction under legitimate authority, and then used it to absorb the target variety?
 
 Until that complete witness is reconstructed, Ouroboros is only a **candidate fixture** and has no experimental `S` finding.
 
