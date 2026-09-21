@@ -48,6 +48,7 @@ downstream autonomy classification
 | [literature/](literature/README.md) | Provenance separated into primary sources, secondary sources, and explicit adaptations. |
 | [profiles/](profiles/README.md) | Non-normative MIN/MAX implementation examples derived from the profile. |
 | [examples/](examples/) | Short conceptual examples at different boundaries and recursion levels. |
+| [experiments/](experiments/README.md) | Non-normative semantic experiments that require fixture/reproducibility work before any released Profile adoption. |
 
 Evidence collection and standalone repository assessments belong to [`assess-vsm-harness`](https://github.com/opensiro/vsm-harness-skills/tree/main/skills/assess-vsm-harness). Cohort-relative synthesis belongs to `vsm-harness-skills`, while the published assessment corpus and derived tables belong to [vsm-harness-index](https://github.com/opensiro/vsm-harness-index).
 
