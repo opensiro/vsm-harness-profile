@@ -2,6 +2,23 @@
 
 All material changes to the normative VSM Harness Profile are recorded here. Downstream release impact is also represented mechanically in [`RELEASE_IMPACT.json`](RELEASE_IMPACT.json).
 
+## 0.2.4 — 2026-09-22
+
+### Changed
+
+- clarify that algedonic signalling is an exceptional escalation path, not an additional S-function;
+- distinguish the algedonic signal/channel from the S3/S4/S5 authority that may receive and respond to it;
+- clarify that queue entries, alerts, `BLOCKED`/`FAILED` states, dashboards, and current-work surfaces may support observability or transport without themselves establishing an algedonic channel or positive VSM mapping;
+- add algedonic-status/function conflation as a named category error.
+
+### Compatibility
+
+This is a PATCH clarification of concepts already present in Profile 0.2.3 §13. It does not add a VSM function, change S1–S5/S3* semantics, change autonomy ownership, or alter a conforming mapping.
+
+### Assessment impact
+
+`none` — existing conforming assessments do not require reassessment solely because of this Profile transition. No new assessment field or ownership state is introduced.
+
 ## 0.2.3 — 2026-09-19
 
 ### Changed

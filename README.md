@@ -1,6 +1,6 @@
 # VSM Harness Profile
 
-**Current Profile version: `0.2.3`**
+**Current Profile version: `0.2.4`**
 
 VSM Harness Profile is the implementation-agnostic organizational reference for autonomous AI agent harnesses.
 
