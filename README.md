@@ -6,6 +6,8 @@ VSM Harness Profile is the implementation-agnostic organizational reference for 
 
 Start with [PROFILE.md](PROFILE.md). It is the only authoritative definition of VSM functions in this ecosystem.
 
+> **Looking for current work?** Start with the shared [`OpenSiro VSM OSS TODO`](https://github.com/opensiro/vsm-oss-organization/blob/main/TODO.md), then follow the selected issue back to its owning repository. For new, unclassified, or cross-repository work, use the [`OpenSiro VSM OSS contributor entry`](https://github.com/opensiro/vsm-oss-organization/blob/main/CONTRIBUTOR_START.md). The owning issue/repository remains authoritative for task scope, evidence, validation, and acceptance.
+
 ```text
 Beer / cybernetics
         ↓
