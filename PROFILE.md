@@ -1,6 +1,6 @@
 # VSM Harness Profile
 
-**Version:** 0.2.3
+**Version:** 0.2.4
 
 ## 1. Status and source boundary
 
@@ -218,7 +218,11 @@ S3 dominance produces strategic myopia; S4 dominance produces novelty without op
 
 Routine exceptions SHOULD remain at the lowest level with requisite information and authority. Exceptions move when their variety exceeds local authority, capability, risk allowance, or time horizon.
 
-An **algedonic signal** communicates exceptional pain or opportunity without waiting for normal reporting compression. It SHOULD reach an authority able to respond, preserve enough evidence for judgment, and remain exceptional rather than becoming a second routine channel. No severity schema or event protocol is required.
+An **algedonic signal** communicates exceptional pain or opportunity without waiting for normal reporting compression. An **algedonic channel** is the exceptional path by which such a signal reaches an authority able to respond. The channel SHOULD preserve enough evidence, timeliness, and fidelity for judgment and SHOULD remain exceptional rather than becoming a second routine reporting path. No severity schema, event protocol, or implementation topology is required.
+
+Algedonic signalling is **not an additional VSM function** and does not determine which function owns the response. Classify the receiving decision by the organizational function actually exercised at the declared recursion: for example, a current whole-system intervention may be S3, an external/future adaptation matter may enter S4, and an identity/ultimate-policy matter may require S5. The signal/channel transports exceptional variety; it does not inherit the decision authority of the receiving function.
+
+A queue entry, alert, `BLOCKED`/`FAILED` state, dashboard, current-work board, or other status surface may make exceptional conditions observable or transport them, but it does not by itself establish an algedonic channel or any S3/S4/S5 mapping. Positive evidence requires a real exceptional signal path with a reachable response authority and, where the receiving function requires it, a reviewable closure into subsequent regulation or operation.
 
 ## 14. Evidence and mapping
 
@@ -270,6 +274,7 @@ Absence of documentation is not proof of absence. Conversely, labels such as “
 - **Learning as intelligence:** training, self-improvement, memory, or event reaction is counted as S4 without an external-and-prospective adaptation loop.
 - **Prompt as policy:** policy text exists without legitimate authority or S3–S4 closure.
 - **Approval as policy:** a human approval or escalation over ordinary work is counted as S5 without an identity/ultimate-policy issue and a return-to-operation closure path.
+- **Algedonic status as function:** an alert, queue entry, `BLOCKED`/`FAILED` status, dashboard, or current-work state is treated as an algedonic channel or as S3/S4/S5 evidence without an exceptional signal path and the relevant receiving function/closure.
 - **Nesting as recursion:** a technical child lacks its own environment, autonomy, and metasystem.
 - **Cargo-cult completeness:** six named actors are created solely to mirror VSM labels.
 - **Variety destruction:** summaries or routing rules remove distinctions required for control.
