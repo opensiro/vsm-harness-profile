@@ -89,13 +89,9 @@ The profile defines organizational functions and relationships. It does not defi
 
 The downstream facade similarly does not define a second semantic model. It only tells consumers how to preserve exact Profile provenance and reason about later release compatibility without treating every version bump as a corpus migration.
 
-## Contributing and organization
+## Contributing
 
-Contribute Profile semantics, normative wording, release-impact metadata, examples, and repository-local maintenance here.
-
-The shared bootstrap/current-work/routing links are kept near the top of this README so they remain directly discoverable without duplicating Organization policy here. `TODO.md` owns current selection/order only; this repository remains authoritative for Profile task scope, evidence and acceptance.
-
-For questions or proposals about **how the OpenSiro VSM Harness OSS repositories are organized as a system** — contributor roles, authority boundaries, cross-repository control, escalation, milestone sequencing, or the shared contribution control plane — use [`opensiro/vsm-oss-organization`](https://github.com/opensiro/vsm-oss-organization). That repository applies this Profile to the OSS organization; it does not replace this repository as the normative source of VSM semantics.
+Contribute Profile semantics, normative wording, release-impact metadata, examples, and repository-local maintenance here. The entry routes at the top of this README own shared bootstrap and cross-repository routing; this repository remains authoritative for Profile task scope, evidence, validation, and acceptance.
 
 ## License
 
