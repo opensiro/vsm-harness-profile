@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "When using VSM Harness Profile semantics, cite the versioned normative Profile document in preferred-citation."
+title: "VSM Harness Profile"
+authors:
+  - name: "OpenSiro contributors"
+type: software
+version: "0.2.4"
+date-released: "2026-09-22"
+repository-code: "https://github.com/opensiro/vsm-harness-profile"
+url: "https://github.com/opensiro/vsm-harness-profile/tree/v0.2.4"
+preferred-citation:
+  type: manual
+  title: "VSM Harness Profile"
+  authors:
+    - name: "OpenSiro contributors"
+  year: 2026
+  version: "0.2.4"
+  url: "https://github.com/opensiro/vsm-harness-profile/blob/v0.2.4/PROFILE.md"
